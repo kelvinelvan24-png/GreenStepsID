@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GreenSteps ID — Satu Langkah Hijau Setiap Hari</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="greensteps-id.css">
+</head>
+<body>
+
+<div class="toast" id="toast"></div>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="navbar-inner">
+    <div style="display:flex;align-items:center">
+      <a href="#" class="logo-text">Green<span>Steps</span></a>
+      <span class="logo-badge">ID</span>
+    </div>
+    <ul class="nav-menu">
+      <li><a href="#tentang">Tentang GreenSteps</a></li>
+      <li><a href="#kampanye">Program & Kampanye</a></li>
+      <li><a href="#artikel">Artikel</a></li>
+      <li><a href="#kontak">Kontak</a></li>
+    </ul>
+    <div style="display:flex;gap:10px;align-items:center" id="auth-area">
+      <button class="btn-outline-nav" onclick="openModal('login')">Masuk</button>
+      <button class="btn-solid-nav" onclick="openModal('register')">Daftar Sekarang</button>
+    </div>
+    <div style="display:none;gap:10px;align-items:center" id="user-area">
+      <div class="u-avatar" id="u-av" onclick="openModal('profile')">U</div>
+      <span style="font-size:0.85rem;font-weight:600;color:#1f5c08" id="u-name">Hi, User</span>
+      <button class="btn-outline-nav" onclick="logout()" style="font-size:0.75rem;padding:0.35rem 0.85rem">Keluar</button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO SLIDER -->
+<section class="hero-slider">
+  <div class="slide active" style="background:linear-gradient(135deg,#eaf6d8,#f5fbee)">
+    <div class="slide-inner">
+      <div>
+        <p style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#5a9a1f;margin-bottom:0.75rem">🌱 Challenge Bulan Ini</p>
+        <h1>Awali Hidupmu dengan <em>30 Hari Zero Waste Challenge</em></h1>
+        <p>Gaya hidup ramah lingkungan bukanlah tujuan, namun sebuah proses. Ajak teman-temanmu untuk berproses bersama! Gunakan hashtag #greensteps30days</p>
+        <button class="btn-hero" onclick="document.getElementById('kampanye').scrollIntoView({behavior:'smooth'})">Ikut Sekarang →</button>
+      </div>
+      <div class="slide-box" style="background:#d8efc0">♻️</div>
+    </div>
+  </div>
+  <div class="slide" style="background:linear-gradient(135deg,#d8f0e8,#f0fbf5)">
+    <div class="slide-inner">
+      <div>
+        <p style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#0a7a5f;margin-bottom:0.75rem">🌊 One-Stop-Solution Platform</p>
+        <h1><em>Gaya Hidup Hijau</em> adalah Mengenai Konsumsi Secara Bijak</h1>
+        <p>GreenSteps ID hadir sebagai wadah berkumpulnya individu, aktivis lingkungan, komunitas, dan semua pihak yang peduli kelestarian alam Indonesia.</p>
+        <button class="btn-hero" onclick="document.getElementById('tentang').scrollIntoView({behavior:'smooth'})">Mulai Di Sini →</button>
+      </div>
+      <div class="slide-box" style="background:#b8e8d8">🌊</div>
+    </div>
+  </div>
+  <div class="slide" style="background:linear-gradient(135deg,#f5f0e0,#faf8f0)">
+    <div class="slide-inner">
+      <div>
+        <p style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#8a6a10;margin-bottom:0.75rem">📊 Carbon Calculator</p>
+        <h1>Hitung Besaran <em>Emisi Karbonmu</em> dari Aktivitas Sehari-hari</h1>
+        <p>Carbon Calculator digunakan untuk menghitung berapa besar emisi karbon yang dihasilkan dari aktivitasmu. Ketahui dan kurangi jejakmu!</p>
+        <button class="btn-hero" onclick="showToast('Fitur Carbon Calculator segera hadir! 🌡️')">Hitung Sekarang →</button>
+      </div>
+      <div class="slide-box" style="background:#f0e8c8">🌡️</div>
+    </div>
+  </div>
+  <div class="slide-dots">
+    <button class="dot active" onclick="goSlide(0)"></button>
+    <button class="dot" onclick="goSlide(1)"></button>
+    <button class="dot" onclick="goSlide(2)"></button>
+  </div>
+</section>
+
+<!-- INFO 3 FITUR -->
+<section class="section" style="background:#fff;padding-top:3.5rem;padding-bottom:3.5rem">
+  <div class="container">
+    <div class="info-grid">
+      <div class="info-card card-hover">
+        <div class="info-icon">💡</div>
+        <h3>GreenSteps Info</h3>
+        <p>Informasi dan tips praktis untuk hidup lebih ramah lingkungan dalam kehidupan sehari-hari. Mulai dari dapur, perjalanan, hingga gaya berbelanjamu.</p>
+        <span class="info-link" onclick="document.getElementById('artikel').scrollIntoView({behavior:'smooth'})">Lihat Lebih Lengkap</span>
+      </div>
+      <div class="info-card card-hover">
+        <div class="info-icon">🗺️</div>
+        <h3>Peta Titik Hijau</h3>
+        <p>Peta titik hijau menunjukkan bank sampah, drop point daur ulang, dan tempat ramah lingkungan terdekat di kotamu di seluruh Indonesia.</p>
+        <span class="info-link" onclick="showToast('Fitur Peta segera hadir! 🗺️')">Lihat Lebih Lengkap</span>
+      </div>
+      <div class="info-card card-hover">
+        <div class="info-icon">📣</div>
+        <h3>Campaign & Program</h3>
+        <p>Kampanye dan program GreenSteps ID yang bisa kamu dukung dan ikuti — dari challenge pribadi hingga aksi kolektif di seluruh nusantara.</p>
+        <span class="info-link" onclick="document.getElementById('kampanye').scrollIntoView({behavior:'smooth'})">Lihat Lebih Lengkap</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- TENTANG -->
+<section class="section" id="tentang" style="background:#f9fdf5">
+  <div class="container">
+    <div class="about-grid">
+      <div style="background:#e8f5d0;border-radius:20px;aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;font-size:8rem">🌿</div>
+      <div>
+        <span class="section-label">Tentang GreenSteps ID</span>
+        <h2 class="section-title">Gerakan Peduli Lingkungan dari Hati Indonesia</h2>
+        <p style="font-size:0.925rem;color:#4a6e2a;line-height:1.85;margin-bottom:1.1rem">Mengusung visi sebagai <strong>one-stop-solution platform</strong> dan payung informasi mengenai gaya hidup ramah lingkungan di nusantara, GreenSteps ID adalah wadah berkumpulnya para individu, aktivis lingkungan, komunitas, dan semua pihak yang peduli akan kelestarian alam Indonesia.</p>
+        <p style="font-size:0.925rem;color:#4a6e2a;line-height:1.85;margin-bottom:0">Kami percaya bahwa perubahan besar dimulai dari langkah kecil — <em><strong>satu langkah hijau setiap hari</strong></em>.</p>
+        <div class="pillar-row">
+          <div class="pillar"><div class="icon">📋</div><h4>Informasi</h4></div>
+          <div class="pillar"><div class="icon">📚</div><h4>Edukasi</h4></div>
+          <div class="pillar"><div class="icon">🤝</div><h4>Kolaborasi</h4></div>
+        </div>
+        <span class="info-link" style="margin-top:1.5rem;display:inline-flex" onclick="showToast('Halaman tentang kami segera lengkap!')">Lihat Selengkapnya</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KENAPA PENTING -->
+<section class="section" style="background:#fff">
+  <div class="container">
+    <div class="about-grid" style="gap:4rem">
+      <div>
+        <span class="section-label">Kenapa Ini Penting?</span>
+        <h2 class="section-title">Apa itu Gaya Hidup Hijau & Kenapa Kita Perlu Bertindak?</h2>
+        <p style="font-size:0.925rem;color:#4a6e2a;line-height:1.85;margin-bottom:1rem">Kita hidup di lingkungan di mana barang-barang sekali pakai digunakan terus-menerus. Seakan kita terpisah dari sampah yang kita buat sendiri. Tanpa disadari, lautan tercemar dan Tempat Pembuangan Akhir (TPA) dipenuhi miliaran ton sampah yang tidak bisa terurai selama ratusan tahun.</p>
+        <p style="font-size:0.925rem;color:#4a6e2a;line-height:1.85;margin-bottom:1.75rem">Kita sudah berada di titik di mana gerakan <strong>gaya hidup hijau</strong> benar-benar diperlukan untuk menjaga masa depan ekosistem Indonesia. <strong>Mulai dari rumah, mulai dari diri sendiri.</strong></p>
+        <button class="btn-hero" onclick="document.getElementById('artikel').scrollIntoView({behavior:'smooth'})">Lihat Artikel Kami →</button>
+      </div>
+      <div style="background:#f0f9e8;border-radius:20px;aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;font-size:8rem">🌍</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- KAMPANYE -->
+<section class="section" id="kampanye" style="background:#f9fdf5">
+  <div class="container">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:2.25rem;flex-wrap:wrap;gap:1rem">
+      <div>
+        <span class="section-label">Program & Kampanye</span>
+        <h2 class="section-title" style="margin-bottom:0">Aksi Nyata untuk Bumi yang Lebih Baik</h2>
+      </div>
+      <div style="display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap">
+        <div id="admin-add-wrap" style="display:none">
+          <button class="btn-hero" style="font-size:0.8rem;padding:0.5rem 1.1rem" onclick="openModal('add-program')">+ Tambah Program</button>
+        </div>
+        <div style="display:flex;gap:0.5rem">
+          <button class="filter-btn on" data-f="all" onclick="setFilter('all',this)">Semua</button>
+          <button class="filter-btn" data-f="aktif" onclick="setFilter('aktif',this)">Aktif</button>
+          <button class="filter-btn" data-f="selesai" onclick="setFilter('selesai',this)">Selesai</button>
+          <button class="filter-btn" data-f="akan-datang" onclick="setFilter('akan-datang',this)">Segera</button>
+        </div>
+      </div>
+    </div>
+    <div class="campaign-grid" id="campaign-grid"></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PARTNER -->
+<section style="background:#f5fbee;padding:3.5rem 2rem;text-align:center">
+  <div class="container">
+    <span class="section-label" style="display:block;text-align:center">Partner Kami</span>
+    <h2 class="section-title" style="text-align:center">Mitra GreenSteps ID</h2>
+    <div class="partner-list">
+      <div class="partner-chip">♻️ EcoNusantara</div>
+      <div class="partner-chip">🌊 LautBersih</div>
+      <div class="partner-chip">🌿 GreenCollect</div>
+      <div class="partner-chip">☀️ SolarRakyat</div>
+      <div class="partner-chip">🌱 PlastikDetoks</div>
+      <div class="partner-chip">💧 AirBersih ID</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ARTIKEL -->
+<section class="section" id="artikel" style="background:#fff">
+  <div class="container">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:2rem;flex-wrap:wrap;gap:1rem">
+      <div>
+        <span class="section-label">Artikel Unggulan</span>
+        <h2 class="section-title" style="margin-bottom:0.2rem">Belajar & Terinspirasi</h2>
+        <p style="font-size:0.8rem;color:#7a9a50;font-style:italic">It's not about perfection, but making better choices!</p>
+      </div>
+      <span class="info-link" onclick="showToast('Halaman artikel lengkap segera hadir!')">Lihat Artikel Lainnya</span>
+    </div>
+    <div class="artikel-grid">
+      <div class="a-card featured card-hover">
+        <div class="a-thumb big at1">🌿</div>
+        <div class="a-body">
+          <p class="a-date">30 Juli 2025</p>
+          <h3>Mengapa Gaya Hidup Zero Waste Bukan Sekadar Tren, Tapi Kebutuhan Mendesak</h3>
+          <p>Kita hidup di era di mana sampah plastik mencemari lautan dan TPA sudah melampaui kapasitas. Saatnya berubah sebelum terlambat.</p>
+          <span class="read-more" onclick="showToast('Artikel lengkap segera hadir!')">Baca Selengkapnya →</span>
+        </div>
+      </div>
+      <div class="a-card card-hover">
+        <div class="a-thumb at2">🛍️</div>
+        <div class="a-body">
+          <p class="a-date">15 Juni 2025</p>
+          <h3>5 Produk Ramah Lingkungan Wajib Ada di Rumahmu</h3>
+          <p>Pengganti plastik sekali pakai yang mudah ditemukan dan terjangkau di Indonesia.</p>
+          <span class="read-more" onclick="showToast('Artikel lengkap segera hadir!')">Baca Selengkapnya →</span>
+        </div>
+      </div>
+      <div class="a-card card-hover">
+        <div class="a-thumb at3">🌱</div>
+        <div class="a-body">
+          <p class="a-date">2 Mei 2025</p>
+          <h3>Kompos Sendiri di Rumah: Panduan Lengkap untuk Pemula</h3>
+          <p>Ubah sisa makananmu menjadi pupuk subur dengan cara yang mudah dan tanpa biaya besar.</p>
+          <span class="read-more" onclick="showToast('Artikel lengkap segera hadir!')">Baca Selengkapnya →</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section class="nl-section" id="kontak">
+  <div style="max-width:560px;margin:0 auto">
+    <h2>Ayo Bergabung Bersama Kami! 🌱</h2>
+    <p>Jadilah yang pertama mengetahui update komunitas dan program terbaru GreenSteps ID langsung di inbox emailmu!</p>
+    <div class="nl-form">
+      <input type="email" id="nl-email" placeholder="Masukkan email kamu...">
+      <button onclick="subscribeNL()">Bergabung Sekarang</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <span class="footer-logo">GreenSteps ID</span>
+      <p>GreenSteps ID adalah one-stop-solution platform untuk gaya hidup ramah lingkungan. Saatnya untuk memulai — satu langkah hijau setiap hari!</p>
+    </div>
+    <div>
+      <h4>Program</h4>
+      <ul>
+        <li><span onclick="document.getElementById('kampanye').scrollIntoView({behavior:'smooth'})">Semua Program</span></li>
+        <li><span onclick="showToast('Segera hadir!')">Peta Titik Hijau</span></li>
+        <li><span onclick="showToast('Segera hadir!')">Carbon Calculator</span></li>
+        <li><span onclick="showToast('Segera hadir!')">Zero Waste Handbook</span></li>
+      </ul>
+    </div>
+    <div>
+      <h4>GreenSteps Collab</h4>
+      <ul>
+        <li><span onclick="document.getElementById('kontak').scrollIntoView({behavior:'smooth'})">Kontak</span></li>
+        <li><span onclick="showToast('Segera hadir!')">Kolaborasi</span></li>
+        <li><span onclick="openModal('register')">Jadi Anggota</span></li>
+        <li><span onclick="showToast('Segera hadir!')">Donasi</span></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Navigasi</h4>
+      <ul>
+        <li><a href="#">Beranda</a></li>
+        <li><span onclick="document.getElementById('tentang').scrollIntoView({behavior:'smooth'})">Tentang Kami</span></li>
+        <li><span onclick="document.getElementById('artikel').scrollIntoView({behavior:'smooth'})">Artikel</span></li>
+        <li><span onclick="document.getElementById('kontak').scrollIntoView({behavior:'smooth'})">Kontak</span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 GreenSteps ID. Semua hak dilindungi.</span>
+    <span>Dibuat dengan 💚 untuk Indonesia</span>
+  </div>
+</footer>
+
+<!-- MODAL LOGIN -->
+<div class="modal-bg" id="modal-login">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('login')">×</button>
+    <h2>Masuk</h2>
+    <div class="f-group"><label>Email</label><input type="email" id="l-email" placeholder="email@contoh.com"></div>
+    <div class="f-group"><label>Password</label><input type="password" id="l-pass" placeholder="Password kamu"></div>
+    <p class="err" id="l-err">Email atau password salah.</p>
+    <button class="btn-full" onclick="doLogin()">Masuk</button>
+    <p class="sw-link">Belum punya akun? <a onclick="switchModal('login','register')">Daftar Sekarang</a></p>
+    <p style="font-size:0.72rem;color:#aaa;text-align:center;margin-top:0.75rem">Demo: admin@greensteps.id / admin123</p>
+  </div>
+</div>
+
+<!-- MODAL REGISTER -->
+<div class="modal-bg" id="modal-register">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('register')">×</button>
+    <h2>Daftar Gratis</h2>
+    <div class="f-group"><label>Nama Lengkap</label><input type="text" id="r-name" placeholder="Nama kamu"></div>
+    <div class="f-group"><label>Email</label><input type="email" id="r-email" placeholder="email@contoh.com"></div>
+    <div class="f-group"><label>Kota</label><input type="text" id="r-city" placeholder="Bandung, Jakarta, Surabaya..."></div>
+    <div class="f-group"><label>Password</label><input type="password" id="r-pass" placeholder="Min. 6 karakter"></div>
+    <p class="err" id="r-err">Email sudah terdaftar.</p>
+    <button class="btn-full" onclick="doRegister()">Buat Akun</button>
+    <p class="sw-link">Sudah punya akun? <a onclick="switchModal('register','login')">Masuk</a></p>
+  </div>
+</div>
+
+<!-- MODAL ADD PROGRAM -->
+<div class="modal-bg" id="modal-add-program">
+  <div class="modal-box modal-lg">
+    <button class="modal-close" onclick="closeModal('add-program')">×</button>
+    <h2>Tambah Program</h2>
+    <div class="f-group"><label>Judul Program</label><input type="text" id="ap-title" placeholder="Judul program..."></div>
+    <div class="f-group"><label>Deskripsi</label><textarea id="ap-desc" rows="3" placeholder="Deskripsi program..." style="resize:none"></textarea></div>
+    <div class="f-row">
+      <div class="f-group"><label>Kategori</label><select id="ap-cat"><option>Zero Waste</option><option>Penghijauan</option><option>Bersih-Bersih</option><option>Edukasi</option><option>Energi</option></select></div>
+      <div class="f-group"><label>Status</label><select id="ap-status"><option value="aktif">Aktif</option><option value="akan-datang">Akan Datang</option><option value="selesai">Selesai</option></select></div>
+    </div>
+    <div class="f-row">
+      <div class="f-group"><label>Emoji Ikon</label><input type="text" id="ap-emoji" placeholder="🌿"></div>
+      <div class="f-group"><label>Target Peserta</label><input type="number" id="ap-target" placeholder="500"></div>
+    </div>
+    <div class="f-group"><label>Tanggal Mulai</label><input type="date" id="ap-date"></div>
+    <button class="btn-full" onclick="doAddProgram()">Simpan Program</button>
+  </div>
+</div>
+
+<!-- MODAL PROFILE -->
+<div class="modal-bg" id="modal-profile">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('profile')">×</button>
+    <div style="text-align:center;margin-bottom:1.25rem">
+      <div style="width:60px;height:60px;border-radius:50%;background:#d8efc0;color:#1f5c08;font-size:1.4rem;font-weight:800;display:flex;align-items:center;justify-content:center;margin:0 auto 0.6rem" id="pf-av">U</div>
+      <h2 style="font-size:1.2rem;margin-bottom:0.2rem" id="pf-name">User</h2>
+      <p style="font-size:0.8rem;color:#7a9a50" id="pf-email">email</p>
+      <span style="background:#d8efc0;color:#1f5c08;font-size:0.68rem;font-weight:700;padding:3px 10px;border-radius:20px;display:inline-block;margin-top:5px" id="pf-role">Anggota</span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:1.25rem">
+      <div style="text-align:center;background:#f5fbee;border-radius:10px;padding:0.9rem;border:1px solid #ddefc2">
+        <div style="font-size:1.4rem;font-weight:800;color:#1f5c08" id="pf-joined">0</div>
+        <div style="font-size:0.7rem;color:#7a9a50;margin-top:2px">Program Diikuti</div>
+      </div>
+      <div style="text-align:center;background:#f5fbee;border-radius:10px;padding:0.9rem;border:1px solid #ddefc2">
+        <div style="font-size:1rem;font-weight:800;color:#1f5c08;word-break:break-all" id="pf-city">-</div>
+        <div style="font-size:0.7rem;color:#7a9a50;margin-top:2px">Kota</div>
+      </div>
+    </div>
+    <p style="font-size:0.78rem;font-weight:700;color:#3a5e1f;margin-bottom:0.6rem">Program yang Diikuti</p>
+    <div id="pf-progs" style="font-size:0.8rem;color:#7a9a50;line-height:1.8">—</div>
+  </div>
+</div>
+
+<script src="greensteps-id.js"></script>
+</body>
+</html>
