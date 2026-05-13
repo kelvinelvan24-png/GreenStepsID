@@ -14,7 +14,35 @@ $programId  = (int)($_GET['program_id'] ?? 0);
 $uid        = (int)$_SESSION['user_id'];
 $db         = getDB();
 
-if ($method !== 'POST' || !$programId) {
+if (!$programId) {
+    jsonResponse(['success' => false, 'message' => 'ID Program diperlukan.'], 400);
+}
+
+// ── MENDAPATKAN PESERTA (Admin Only) ─────────────────────────
+if ($method === 'GET' && $action === 'participants') {
+    // Cek admin
+    $stmtRole = $db->prepare("SELECT role FROM users WHERE id = ?");
+    $stmtRole->bind_param('i', $uid);
+    $stmtRole->execute();
+    $roleRow = $stmtRole->get_result()->fetch_assoc();
+    if (!$roleRow || $roleRow['role'] !== 'admin') {
+        jsonResponse(['success' => false, 'message' => 'Akses ditolak.'], 403);
+    }
+
+    $pStmt = $db->prepare("
+        SELECT u.id, u.name, u.email 
+        FROM users u 
+        JOIN user_programs up ON u.id = up.user_id 
+        WHERE up.program_id = ?
+        ORDER BY u.name ASC
+    ");
+    $pStmt->bind_param('i', $programId);
+    $pStmt->execute();
+    $participants = $pStmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    jsonResponse(['success' => true, 'participants' => $participants]);
+}
+
+if ($method !== 'POST') {
     jsonResponse(['success' => false, 'message' => 'Request tidak valid.'], 400);
 }
 
@@ -42,14 +70,20 @@ if ($action === 'join') {
         jsonResponse(['success' => false, 'message' => 'Sudah bergabung.'], 409);
     }
 
-    // Insert join
-    $ins = $db->prepare("INSERT INTO user_programs (user_id, program_id) VALUES (?, ?)");
+    // Insert join with IGNORE to prevent race conditions
+    $ins = $db->prepare("INSERT IGNORE INTO user_programs (user_id, program_id) VALUES (?, ?)");
     $ins->bind_param('ii', $uid, $programId);
     $ins->execute();
+    
+    // Jika tidak ada baris yang terpengaruh, berarti sudah join (race condition)
+    if ($ins->affected_rows === 0) {
+        jsonResponse(['success' => false, 'message' => 'Sudah bergabung.'], 409);
+    }
 
     // Tambah participants
-    $db->prepare("UPDATE programs SET participants = participants + 1 WHERE id = ?")->bind_param('i', $programId)->execute();
-    $db->query("UPDATE programs SET participants = participants + 1 WHERE id = $programId");
+    $upd = $db->prepare("UPDATE programs SET participants = participants + 1 WHERE id = ?");
+    $upd->bind_param('i', $programId);
+    $upd->execute();
 
     // XP +30
     $xpAmount = 30;
@@ -78,6 +112,10 @@ if ($action === 'unjoin') {
     $del = $db->prepare("DELETE FROM user_programs WHERE user_id = ? AND program_id = ?");
     $del->bind_param('ii', $uid, $programId);
     $del->execute();
+
+    if ($del->affected_rows === 0) {
+        jsonResponse(['success' => false, 'message' => 'Belum bergabung.'], 400);
+    }
 
     // Kurangi participants (min 0)
     $db->query("UPDATE programs SET participants = GREATEST(0, participants - 1) WHERE id = $programId");

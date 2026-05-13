@@ -24,6 +24,34 @@ if (empty($_SESSION['user_id'])) {
 }
 $uid = (int)$_SESSION['user_id'];
 
+// ── POST /api/users.php?action=redeem_reward ─────────────────
+if ($method === 'POST' && $action === 'redeem_reward') {
+    $d = getInput();
+    $rewardName = trim($d['reward_name'] ?? '');
+    $cost = (int)($d['cost'] ?? 0);
+
+    if (!$rewardName || $cost <= 0) {
+        jsonResponse(['success' => false, 'message' => 'Data reward tidak valid.'], 400);
+    }
+
+    $xpRow = $db->query("SELECT xp FROM users WHERE id = $uid")->fetch_assoc();
+    $currentXp = (int)$xpRow['xp'];
+
+    if ($currentXp < $cost) {
+        jsonResponse(['success' => false, 'message' => 'XP tidak cukup.'], 400);
+    }
+
+    $db->query("UPDATE users SET xp = xp - $cost WHERE id = $uid");
+
+    $reason = 'Tukar Reward: ' . $rewardName;
+    $amount = -$cost;
+    $logStmt = $db->prepare("INSERT INTO rep_log (user_id, amount, reason) VALUES (?, ?, ?)");
+    $logStmt->bind_param('iis', $uid, $amount, $reason);
+    $logStmt->execute();
+
+    jsonResponse(['success' => true, 'message' => 'Reward berhasil ditukar.', 'xp' => $currentXp - $cost]);
+}
+
 // ── PUT /api/users.php — Edit profil ─────────────────────────
 if ($method === 'PUT') {
     $d    = getInput();

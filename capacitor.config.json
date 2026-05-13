@@ -1,0 +1,12 @@
+{
+  "appId": "com.greensteps.app",
+  "appName": "GreenSteps ID",
+  "webDir": "www",
+  "bundledWebRuntime": false,
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 2000,
+      "backgroundColor": "#ffffff"
+    }
+  }
+}
